@@ -62,6 +62,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center lg:space-x-2">
+              <Link to={'view-cart'}>          
               <button
                 id="myCartDropdownButton1"
                 type="button"
@@ -89,6 +90,7 @@ export default function Header() {
                   My Cart ({totalCartItems})
                 </span>
               </button>
+              </Link>
 
               {isLogin ? (
                 <button

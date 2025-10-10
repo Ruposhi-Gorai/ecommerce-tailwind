@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-const cartData = JSON.parse(localStorage.getItem("CartItems"));
+const cartData = JSON.parse(localStorage.getItem("cartItems"));
 
 const initialState = {
   cartItems: cartData ?? [],
@@ -11,15 +11,44 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
+    increment: (state, action) => {
+     const finalData = state.cartItems.map((v,i)=>{
+      if(v.id == action.payload){
+        v.quantity++;
+      }else{
+        return v;
+      }
+
+     })
+
+     state.cartItems = finalData;
+     localStorage.setItem('cartItems', JSON.stringify(finalData));
     },
-    decrement: (state) => {
-      state.value -= 1;
+    decrement: (state, action) => {
+       const finalData = state.cartItems.map((v,i)=>{
+      if(v.id == action.payload && v.quantity > 1){
+        v.quantity--;
+      }else{
+        return v;
+      }
+
+     })
+
+     state.cartItems = finalData;
+    localStorage.setItem('cartItems', JSON.stringify(finalData));
+
+    },
+    remove: (state, action)=>{
+      const finalData = state.cartItems.filter((v,i)=>{
+        if(v.id == action.payload){
+
+        }else{
+          return v;
+        }
+      })
+      state.cartItems = finalData;
+    localStorage.setItem('cartItems', JSON.stringify(finalData));
+
     },
     addToCart: (state, action) => {
       // console.log(state.cartItems); //prev data
@@ -63,6 +92,6 @@ export const cartSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addToCart } = cartSlice.actions;
+export const { addToCart , increment, decrement, remove} = cartSlice.actions;
 
 export default cartSlice.reducer;
